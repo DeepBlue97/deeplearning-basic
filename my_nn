@@ -1,0 +1,121 @@
+import random
+import math
+
+
+def softmax(l):
+    sum_ex = 0
+    res = []
+    for i in l:
+        sum_ex += math.e ** i
+    for i in l:
+        res.append(math.e ** i / sum_ex)
+    return res
+
+
+def sigmoid(x):
+    return 1 / (1 + math.e ** (-x))
+
+
+# print(softmax([1, 2, 3]))
+# print(sigmoid(3))
+
+lr = 0.01
+label = [0, 1]
+p_0 = [
+    [0, 1, 0],
+    [1, 0, 1],
+    [0, 1, 0]
+]
+p_1 = [
+    [0, 1, 0],
+    [0, 1, 0],
+    [0, 1, 0]
+]
+
+w1 = []  # 第一层参数
+for row in range(4):
+    w1.append([])
+    for col in range(9):
+        w1[row].append(0.5)
+w2 = []
+for row in range(4):
+    w2.append([])
+    for col in range(4):
+        w2[row].append(0.5)
+w3 = []
+for row in range(2):
+    w3.append([])
+    for col in range(4):
+        w3[row].append(0.5)
+res_layer1 = [0, 0, 0, 0]  # 第一层结果
+res_layer2 = [0, 0, 0, 0]
+res_layer3 = [0, 0]
+
+# for i in range(4):
+#     w1.append(random.random())
+#     w2.append(random.random())
+#     res_layer1.append(0)
+#     res_layer2.append(0)
+# print(w1)
+# print(w2)
+
+
+for w_row in range(len(w1)):
+    for w_col in range(len(w1[w_row])):
+        for row in range(len(p_0)):
+            for col in range(len(p_0[row])):
+                res_layer1[w_row] += p_0[row][col] * w1[w_row][w_col]
+
+for i in range(len(res_layer1)):
+    res_layer1[i] = sigmoid(res_layer1[i])
+print(res_layer1)
+
+for w_row in range(len(w2)):
+    for w_col in range(len(w2[w_row])):
+        for i in range(len(res_layer1)):
+            res_layer2[w_row] += res_layer1[i] * w2[w_row][w_col]
+
+for i in range(len(res_layer2)):
+    res_layer1[i] = sigmoid(res_layer2[i])
+print(res_layer2)
+
+for w_row in range(len(w3)):
+    for w_col in range(len(w3[w_row])):
+        for i in range(len(res_layer2)):
+            res_layer3[w_row] += res_layer2[i] * w3[w_row][w_col]
+print(res_layer3)
+
+
+# first change
+if label[0] == 0:
+    for i in range(len(w3[1])):
+        w3[1][i] -= lr
+print('changed')
+res_layer1 = [0, 0, 0, 0]  # 第一层结果
+res_layer2 = [0, 0, 0, 0]
+res_layer3 = [0, 0]
+
+for w_row in range(len(w1)):
+    for w_col in range(len(w1[w_row])):
+        for row in range(len(p_0)):
+            for col in range(len(p_0[row])):
+                res_layer1[w_row] += p_0[row][col] * w1[w_row][w_col]
+
+for i in range(len(res_layer1)):
+    res_layer1[i] = sigmoid(res_layer1[i])
+print(res_layer1)
+
+for w_row in range(len(w2)):
+    for w_col in range(len(w2[w_row])):
+        for i in range(len(res_layer1)):
+            res_layer2[w_row] += res_layer1[i] * w2[w_row][w_col]
+
+for i in range(len(res_layer2)):
+    res_layer1[i] = sigmoid(res_layer2[i])
+print(res_layer2)
+
+for w_row in range(len(w3)):
+    for w_col in range(len(w3[w_row])):
+        for i in range(len(res_layer2)):
+            res_layer3[w_row] += res_layer2[i] * w3[w_row][w_col]
+print(res_layer3)
